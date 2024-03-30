@@ -7,24 +7,43 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send("hello world");
 });
-router.post("/users", async (req, res) => {
+router.post("/signup", async (req, res) => {
+  const{name , email , password} = req.body;
+  if(!name || !email || !password){
+   return res.send("please provide all the field")
+  }
+
   try {
-    const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-    });
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    const userExist = await User.findOne({email});
+    if(userExist){
+     return res.status(401).json("user already exist");
+    }
+    else{
+      const newUser = new User({
+        name,
+        email,
+        password
+      });
+       await newUser.save();
+      res.status(201).json("register successfully");
+    }
+
+    
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
 // GET route to fetch all users
-router.get("/users", async (req, res) => {
+router.get("/signin", async (req, res) => {
   try {
-    const users = await User.find();
+    const [email,password] =req.body();
+    const users = await User.find(email);
+
+    if(users){
+      const passCheck = await 
+    }
+
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
