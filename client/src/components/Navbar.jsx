@@ -1,10 +1,11 @@
 import React from "react";
 import { Button, Navbar, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
 
 const Nav = () => {
+  const path = useLocation().pathname;
   return (
     <>
       <Navbar fluid={true} className="border-b-2">
@@ -25,19 +26,31 @@ const Nav = () => {
             rightIcon={AiOutlineSearch}
           />
         </form>
-        <Button color="light" className="ml-auto h-8 w-10  sm:hidden">
+        <Button color="light" className="ml-auto h-8 w-10  sm:hidden" pill>
           <AiOutlineSearch />
         </Button>
         <div className="ml-auto items-center flex gap-2 md:order-2">
-          <Button color="light" className=" w-12 h-10 hidden sm:inline">
+          <Button color="light" className=" w-12 h-10 " pill>
             <FaMoon />
           </Button>
-          <Link to="/signin">
-            <Button gradientDuoTone={"purpleToBlue"} className="h-8 w-20">
+          <Link to="/signup">
+            <Button gradientDuoTone={"purpleToBlue"} className="h-8 w-30">
               Sign In
             </Button>
           </Link>
+          <Navbar.Toggle />
         </div>
+        <Navbar.Collapse className="m-auto font-semibold text-dark ">
+          <Navbar.Link active={path === "/"} as={"div"}>
+            <Link to="/">Home</Link>
+          </Navbar.Link>
+          <Navbar.Link active={path === "/about"} as={"div"}>
+            <Link to="/about">About</Link>
+          </Navbar.Link>
+          <Navbar.Link active={path === "/projects"} as={"div"}>
+            <Link to="/projects">Projects</Link>
+          </Navbar.Link>
+        </Navbar.Collapse>
       </Navbar>
     </>
   );
