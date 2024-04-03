@@ -1,18 +1,63 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { TextInput, Label } from "flowbite-react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { TextInput, Label, Button, Alert, Spinner } from "flowbite-react";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState({ name: "", email: "", password: "" });
+  const [err, setErr] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState();
+
+  const setChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value.trim() });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErr(null);
+    const { name, email, password } = user;
+
+    try {
+      setLoading(true);
+      const res = await fetch("https://xnyrw2-3001.csb.app/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ name, email, password }),
+      });
+      if (res.status === 401) {
+        setErr("Email already exist");
+      } else if (res.status === 201) {
+        setSuccess("register successfully");
+        setTimeout(() => {
+          navigate("/signin");
+        }, 1000);
+      } else if (res.status === 400) {
+        setErr("please provide all the field");
+      } else {
+        setErr("something went wrong");
+      }
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className=" min-h-screen flex items-center justify-center  ">
-      <div className="flex max-w-3xl mx-auto p-4 flex-col md:flex-row">
+    <div className=" min-h-screen mt-10    ">
+      <div className="flex max-w-xl mx-auto p-4  flex-col md:flex-row items-center gap-4">
         {/* left */}
-        <div className="m-5">
+        <div className="flex-1">
           <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mb-2">
               <Label value="Name" />
               <TextInput
+                onChange={setChange}
+                value={user.name}
                 type="text"
                 id="name"
                 name="name"
@@ -22,6 +67,8 @@ const SignUp = () => {
             <div className="mb-2">
               <Label value="Email" />
               <TextInput
+                onChange={setChange}
+                value={user.email}
                 type="email"
                 id="email"
                 name="email"
@@ -31,6 +78,8 @@ const SignUp = () => {
             <div className="mb-2">
               <Label value="Password" />
               <TextInput
+                onChange={setChange}
+                value={user.password}
                 type="password"
                 id="password"
                 name="password"
@@ -39,23 +88,40 @@ const SignUp = () => {
             </div>
 
             <div className="mb-4">
-              <button
+              <Button
                 type="submit"
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                gradientDuoTone="purpleToBlue"
+                className="w-full  h-10"
+                disabled={loading}
               >
-                Sign Up
-              </button>
+                {loading ? (
+                  <>
+                    <Spinner size="sm" />
+                    <span className="pl-3">Loading...</span>
+                  </>
+                ) : (
+                  "Sign up"
+                )}
+              </Button>
             </div>
           </form>
-          <p className="text-gray-600 text-sm">
+          <p className="text-black-600  text-sm m-3">
             Already have an account?{" "}
-            <a href="#" className="text-blue-500 hover:text-blue-700">
+            <Link to="/signin" className="text-blue-500 hover:text-blue-700">
               Login
-            </a>
+            </Link>
           </p>
+          {err ? (
+            <Alert className="text-red-500 text-sm mt-2">{err}</Alert>
+          ) : (
+            success && (
+              <Alert className="text-green-500 text-sm mt-2">{success}</Alert>
+            )
+          )}
         </div>
-        <div className=" ">
-          <Link to="/" className=" font-bold text-2xl dark:text-white">
+        {/* right */}
+        <div className=" flex-1   ">
+          <Link className=" font-bold text-2xl dark:text-white">
             <span className="px-2 py-1 bg-gradient-to-r rounded-sm from-indigo-500 via-purple-500 to-green-500 text-white ">
               Biswa's{" "}
             </span>

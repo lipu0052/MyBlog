@@ -1,16 +1,18 @@
 const express = require("express");
 const User = require("./schema"); // Assuming the schema/model file is named model.js
-
+const bodyParser = require("body-parser");
 const router = express.Router();
+router.use(bodyParser.json());
 
 // POST route to create a new user
 router.get("/", (req, res) => {
-  res.send("hello world");
+  res.send("hello world ");
 });
 router.post("/signup", async (req, res) => {
+  console.log("get to signup");
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
-    return res.send("please provide all the field");
+    return res.status(400).send("please provide all the field");
   }
 
   try {
@@ -34,10 +36,7 @@ router.post("/signup", async (req, res) => {
 // GET route to fetch all users
 router.get("/signin", async (req, res) => {
   try {
-    const [email, password] = req.body();
-    const users = await User.find(email);
-
-    res.json(users);
+    console.log("get to signin");
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
