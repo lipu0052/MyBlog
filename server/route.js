@@ -34,9 +34,22 @@ router.post("/signup", async (req, res) => {
 });
 
 // GET route to fetch all users
-router.get("/signin", async (req, res) => {
+router.post("/signin", async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).send("please provide all the field");
+  }
   try {
-    console.log("get to signin");
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(402).json("user not found");
+    } else if (user.password !== password) {
+      return res.status(401).json("wrong password");
+    } else if (user.password === password) {
+      res.status(201).json("login successfully");
+    } else {
+      res.json("something went wrong");
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
