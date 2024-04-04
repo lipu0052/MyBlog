@@ -31,7 +31,7 @@ const Signin = () => {
       });
       if (res.status === 400) {
         setErr("please provide all the field");
-      } else if (res.status === 201) {
+      } else if (res.status === 200) {
         setSuccess("Login successfully");
         setTimeout(() => {
           navigate("/");
@@ -51,8 +51,8 @@ const Signin = () => {
   };
 
   return (
-    <div className=" min-h-screen mt-10">
-      <div className="flex max-w-xl mx-auto p-4  flex-col md:flex-row items-center gap-4">
+    <div className=" min-h-screen   mt-10">
+      <div className="flex  mx-auto p-4 max-w-sm flex-col md:flex-row items-center gap-4">
         <div className="flex-1">
           <h2 className="text-2xl font-semibold mb-4">Sign In</h2>
           <form onSubmit={handleSubmit}>

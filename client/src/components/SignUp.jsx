@@ -50,7 +50,7 @@ const SignUp = () => {
     <div className=" min-h-screen mt-10    ">
       <div className="flex max-w-xl mx-auto p-4  flex-col md:flex-row items-center gap-4">
         {/* left */}
-        <div className="flex-1">
+        <div className="flex-1 order-2 md:order-1">
           <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-2">
@@ -120,7 +120,7 @@ const SignUp = () => {
           )}
         </div>
         {/* right */}
-        <div className=" flex-1   ">
+        <div className=" flex-1 order-1    ">
           <Link className=" font-bold text-2xl dark:text-white">
             <span className="px-2 py-1 bg-gradient-to-r rounded-sm from-indigo-500 via-purple-500 to-green-500 text-white ">
               Biswa's{" "}

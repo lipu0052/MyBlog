@@ -3,6 +3,10 @@ const User = require("./schema"); // Assuming the schema/model file is named mod
 const bodyParser = require("body-parser");
 const router = express.Router();
 router.use(bodyParser.json());
+const bcrypt = require("bcryptjs");
+
+const jwt = require("jsonwebtoken");
+const jwtSecret = "mynameisbiswaiamfromboindaangulodisha";
 
 // POST route to create a new user
 router.get("/", (req, res) => {
@@ -43,12 +47,19 @@ router.post("/signin", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(402).json("user not found");
-    } else if (user.password !== password) {
-      return res.status(401).json("wrong password");
-    } else if (user.password === password) {
-      res.status(201).json("login successfully");
     } else {
-      res.json("something went wrong");
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json("Wrong password");
+      } else {
+        const token = jwt.sign({ _id: user._id }, jwtSecret);
+        return res
+          .status(200)
+          .cookie("access_token", token, {
+            httpOnly: true,
+          })
+          .json({ message: "signin sucessfully", user });
+      }
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
