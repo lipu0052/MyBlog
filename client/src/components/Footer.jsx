@@ -46,7 +46,7 @@ const Foot = () => (
       </div>
       <Footer.Divider />
       <div className="flex text-xs  gap-4 flex-col md:flex-row lg:flex-row justify-center  items-center">
-        <div className="w-full">
+        <div className="w-full text-center">
           <p className="text-gray-600">
             Made with <FaHeart className="inline text-red-500" /> by Your Name
           </p>
@@ -61,7 +61,7 @@ const Foot = () => (
             rel="noopener noreferrer"
           >
             <RiGithubFill
-              className="text-gray-600 hover:text-gray-900 transition duration-300"
+              className="text-gray-600 hover:text-blue-500  transition duration-300 hover:scale-150"
               size={24}
             />
           </a>
@@ -71,7 +71,7 @@ const Foot = () => (
             rel="noopener noreferrer"
           >
             <RiTwitterFill
-              className="text-gray-600 hover:text-blue-500 transition duration-300"
+              className="text-gray-600 hover:text-blue-500 transition duration-300 hover:scale-150"
               size={24}
             />
           </a>
@@ -81,7 +81,7 @@ const Foot = () => (
             rel="noopener noreferrer"
           >
             <RiInstagramFill
-              className="text-gray-600 hover:text-blue-500 transition duration-300"
+              className="text-gray-600 hover:text-blue-500 transition duration-300 hover:scale-150"
               size={24}
             />
           </a>
@@ -91,7 +91,7 @@ const Foot = () => (
             rel="noopener noreferrer"
           >
             <RiLinkedinFill
-              className="text-gray-600 hover:text-blue-600 transition duration-300"
+              className="text-gray-600 hover:text-blue-600 transition duration-300 hover:scale-150"
               size={24}
             />
           </a>
