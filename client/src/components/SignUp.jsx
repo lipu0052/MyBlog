@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { TextInput, Label, Button, Alert, Spinner } from "flowbite-react";
+import GoogleAuth from "./GoogleAuth";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -103,6 +104,7 @@ const SignUp = () => {
                   "Sign up"
                 )}
               </Button>
+              <GoogleAuth />
             </div>
           </form>
           <p className="text-black-600  text-sm m-3">
