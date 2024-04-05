@@ -4,7 +4,7 @@ import { AiFillGoogleCircle } from "react-icons/ai";
 import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
 import { app } from "../firebase"; // Ensure you import your initialized Firebase app
 
-const GoogleAuth = () => {
+const GoogleAuth = ({ onSuccess }) => {
   const auth = getAuth(app);
 
   const handleGoogleAuth = async () => {
@@ -12,8 +12,24 @@ const GoogleAuth = () => {
     provider.setCustomParameters({ prompt: "select_account" });
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log(result);
+      console.log("Google authentication successful:", result);
       // Handle successful authentication
+      const res = await fetch("https://xnyrw2-3001.csb.app/googleSignin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: result.user.displayName,
+          email: result.user.email,
+          googlePhotoUrl: result.user.photoUrl,
+        }),
+      });
+      const data = await res.json();
+      if (res.status === 200) {
+        onSuccess();
+      }
+      if (res.status === 201) {
+        onSuccess();
+      }
     } catch (error) {
       console.error("Google authentication failed:", error);
       // Handle authentication failure

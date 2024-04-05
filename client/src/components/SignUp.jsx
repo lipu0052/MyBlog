@@ -46,6 +46,12 @@ const SignUp = () => {
       setLoading(false);
     }
   };
+  const handleSuccess = () => {
+    setSuccess("Signup successfully");
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
+  };
 
   return (
     <div className=" min-h-screen mt-10    ">
@@ -104,7 +110,7 @@ const SignUp = () => {
                   "Sign up"
                 )}
               </Button>
-              <GoogleAuth />
+              <GoogleAuth onSuccess={handleSuccess} />
             </div>
           </form>
           <p className="text-black-600  text-sm m-3">

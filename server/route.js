@@ -65,5 +65,46 @@ router.post("/signin", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+router.post("/googleSignin", async (req, res, next) => {
+  const { name, email, googlePhotoUrl } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const token = jwt.sign({ _id: user._id }, jwtSecret);
+      res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .json({ message: "signin sucessfully", user });
+    } else {
+      const generatePassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashPass = await bcrypt.hash(generatePassword, 10);
+      const newUser = new User({
+        name:
+          name.toLowerCase().split(" ").join("") +
+          Math.random().toString(9).slice(-4),
+
+        email,
+        password: hashPass,
+        profileImg: googlePhotoUrl,
+      });
+      await newUser.save();
+      const token = jwt.sign({ _id: newUser._id }, jwtSecret);
+
+      res
+        .status(201)
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .json({ message: "signup sucessfully", user });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;

@@ -50,6 +50,12 @@ const Signin = () => {
       setLoading(false);
     }
   };
+  const handleSuccess = () => {
+    setSuccess("Login successfully");
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
+  };
 
   return (
     <div className=" min-h-screen   mt-10">
@@ -96,7 +102,8 @@ const Signin = () => {
                 )}
               </Button>
             </div>
-            <GoogleAuth />
+            <GoogleAuth onSuccess={handleSuccess} />{" "}
+            {/* Pass handleSuccess as prop */}
           </form>
           <p className="text-black-600  text-sm m-3">
             Don't have an account?{" "}
