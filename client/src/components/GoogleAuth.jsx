@@ -14,7 +14,7 @@ const GoogleAuth = ({ onSuccess }) => {
       const result = await signInWithPopup(auth, provider);
       console.log("Google authentication successful:", result);
       // Handle successful authentication
-      const res = await fetch("https://xnyrw2-3001.csb.app/googleSignin", {
+      const res = await fetch("https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/googleSignin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
