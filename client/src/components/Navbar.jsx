@@ -1,11 +1,36 @@
-import React from "react";
-import { Button, Navbar, TextInput } from "flowbite-react";
+import React,{useEffect} from "react";
+import { Button, Navbar, TextInput,Dropdown, Avatar } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
 
 const Nav = () => {
   const path = useLocation().pathname;
+  const [user, setUser] = React.useState();
+
+  // Function to fetch user profile data
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/userdata', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          
+        },
+        credentials: 'include',
+      });
+      const data = await response.json();
+      console.log(data);
+      setUser(data);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setUser(null);
+    }
+  };
+  useEffect(() => {
+    fetchUserData();
+  },[])
   return (
     <>
       <Navbar fluid={true} className="border-b-2">
@@ -29,7 +54,19 @@ const Nav = () => {
         <Button color="light" className="ml-auto h-8 w-10  sm:hidden" pill>
           <AiOutlineSearch />
         </Button>
+      
         <div className="ml-auto items-center flex gap-2 md:order-2">
+        <Dropdown arrowIcon={false} inline label={
+          <Avatar
+          alt="user"
+          img={user.profileImg}
+
+         
+          rounded="small"
+                 
+          />
+        }>
+        </Dropdown>
           <Button color="light" className=" w-12 h-10 " pill>
             <FaMoon />
           </Button>

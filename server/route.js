@@ -10,8 +10,23 @@ const jwtSecret = "mynameisbiswaiamfromboindaangulodisha";
 
 // POST route to create a new user
 router.get("/", (req, res) => {
-  res.send("hello world ");
+  res.send("hello world  from backend");
 });
+const authenticateUser = async (req, res, next) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+    res.send("Unauthorized");
+  }
+  try {
+    const decoded = jwt.verify(token, jwtSecret);
+      req.user = decoded;
+
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+};
 router.post("/signup", async (req, res) => {
   console.log("get to signup");
   const { name, email, password } = req.body;
@@ -72,9 +87,7 @@ router.post("/googleSignin", async (req, res, next) => {
     const user = await User.findOne({ email });
     if (user) {
       const token = jwt.sign({ _id: user._id }, jwtSecret);
-      res
-        .status(200)
-        .cookie("access_token", token, {
+      res.cookie("access_token", token, {
           httpOnly: true,
         })
         .json({ message: "signin sucessfully", user });
@@ -95,16 +108,17 @@ router.post("/googleSignin", async (req, res, next) => {
       await newUser.save();
       const token = jwt.sign({ _id: newUser._id }, jwtSecret);
 
-      res
-        .status(201)
-        .cookie("access_token", token, {
-          httpOnly: true,
-        })
+      res.cookie("access_token", token, {
+        httpOnly: true,
+      })
         .json({ message: "signup sucessfully", user });
     }
   } catch (err) {
     next(err);
   }
+});
+router.get("/userdata", authenticateUser, async (req, res) => {
+  res.send(req.user);
 });
 
 module.exports = router;
