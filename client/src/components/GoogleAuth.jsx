@@ -12,7 +12,6 @@ const GoogleAuth = ({ onSuccess }) => {
     provider.setCustomParameters({ prompt: "select_account" });
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log("Google authentication successful:", result);
       // Handle successful authentication
       const res = await fetch("https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/googleSignin", {
         method: "POST",

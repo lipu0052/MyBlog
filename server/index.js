@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cookieParser = require("cookie-parser");
 
 const connectDb = require("./db.js");
 const router = require("./route");
@@ -12,6 +13,8 @@ const coreOptions = {
   credentials: true,
 };
 app.use(cors(coreOptions));
+
+app.use(cookieParser());
 
 connectDb();
 app.use(express.json());

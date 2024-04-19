@@ -1,5 +1,5 @@
-import React,{useEffect} from "react";
-import { Button, Navbar, TextInput,Dropdown, Avatar } from "flowbite-react";
+import React, { useEffect } from "react";
+import { Button, Navbar, TextInput, Dropdown, Avatar } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
@@ -16,12 +16,11 @@ const Nav = () => {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          
+
         },
         credentials: 'include',
       });
       const data = await response.json();
-      console.log(data);
       setUser(data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -30,7 +29,7 @@ const Nav = () => {
   };
   useEffect(() => {
     fetchUserData();
-  },[])
+  }, [])
   return (
     <>
       <Navbar fluid={true} className="border-b-2">
@@ -39,7 +38,7 @@ const Nav = () => {
           className="self-center whitespace-nowrap text-sm sm:text-sm font-semibold md:text-bold dark:text-white"
         >
           <span className="px-2 py-1 bg-gradient-to-r rounded-sm from-indigo-500 via-purple-500 to-green-500 text-white ">
-{user.name}{" "}
+            {user.name}{" "}
           </span>
           BLOG
         </Link>
@@ -54,7 +53,7 @@ const Nav = () => {
         <Button color="light" className="ml-auto h-8 w-10  sm:hidden" pill>
           <AiOutlineSearch />
         </Button>
-      
+
         <div className="ml-auto items-center flex gap-2 md:order-2">
 
           <Button color="light" className=" w-12 h-10 " pill>
@@ -63,16 +62,16 @@ const Nav = () => {
           {user ? (
             <>
               <Dropdown arrowIcon={false} inline label={
-          <Avatar
-          alt="user"
-          img={user.profileImg}
+                <Avatar
+                  alt="user"
+                  img={user.profileImg}
 
-         
-          rounded="small"
-                 
-          />
-        }>
-          </Dropdown>
+
+                  rounded="small"
+
+                />
+              }>
+              </Dropdown>
               <Link to="/logout">
                 <Button gradientDuoTone={"purpleToBlue"} className=" w-20 h-8 " >
                   Logout
@@ -84,16 +83,15 @@ const Nav = () => {
             <Link to="/signup">
             <Button gradientDuoTone={"purpleToBlue"} className="h-8 w-30">
               Sign In
-              </Button>
-             
+            </Button>
           </Link>
             
-            )
+          )
           }
-              
-          
-            
-                    
+
+
+
+
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse className="m-auto font-semibold text-dark ">

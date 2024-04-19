@@ -33,6 +33,7 @@ const Signin = () => {
       if (res.status === 400) {
         setErr("please provide all the field");
       } else if (res.status === 200) {
+        setLoading(false);
         setSuccess("Login successfully");
         setTimeout(() => {
           navigate("/");

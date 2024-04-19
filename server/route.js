@@ -13,18 +13,20 @@ router.get("/", (req, res) => {
   res.send("hello world  from backend");
 });
 const authenticateUser = async (req, res, next) => {
-  const token = req.cookies.access_token;
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-    res.send("Unauthorized");
-  }
-  try {
-    const decoded = jwt.verify(token, jwtSecret);
-      req.user = decoded;
 
+  try {
+    const token = req.cookies.access_token;
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+    const user = jwt.verify(token, jwtSecret);
+    const rootUser = await User.findOne({ _id: user._id });
+console.log(rootUser);
+    req.rootuser = rootUser;
     next();
+
   } catch (err) {
-    return res.status(401).json({ message: "Invalid token" });
+    return res.status(401).json({ message: "Invalid token " });
   }
 };
 router.post("/signup", async (req, res) => {
@@ -67,13 +69,11 @@ router.post("/signin", async (req, res) => {
       if (!passwordMatch) {
         return res.status(401).json("Wrong password");
       } else {
-        const token = jwt.sign({ _id: user._id }, jwtSecret);
-        return res
-          .status(200)
-          .cookie("access_token", token, {
-            httpOnly: true,
-          })
-          .json({ message: "signin sucessfully", user });
+        const token = await  jwt.sign({ _id: user._id }, jwtSecret);
+        res.cookie("access_token", token, {
+          httpOnly: true,
+        });
+        return res.status(200).json({ message: "Signin successfully", user });
       }
     }
   } catch (err) {
@@ -86,11 +86,12 @@ router.post("/googleSignin", async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign({ _id: user._id }, jwtSecret);
+      const token = await jwt.sign({ _id: user._id }, jwtSecret);
+      console.log(token);
       res.cookie("access_token", token, {
-          httpOnly: true,
-        })
-        .json({ message: "signin sucessfully", user });
+        httpOnly: true,
+      });
+      return res.status(200).json({ message: "Signin successfully", user })
     } else {
       const generatePassword =
         Math.random().toString(36).slice(-8) +
@@ -106,19 +107,26 @@ router.post("/googleSignin", async (req, res, next) => {
         profileImg: googlePhotoUrl,
       });
       await newUser.save();
-      const token = jwt.sign({ _id: newUser._id }, jwtSecret);
+      const token = await jwt.sign({ _id: newUser._id }, jwtSecret);
+      console.log(token);
+
 
       res.cookie("access_token", token, {
         httpOnly: true,
-      })
-        .json({ message: "signup sucessfully", user });
+      });
+      return res.status(200).json({ message: "Signin successfully", user })
     }
   } catch (err) {
     next(err);
   }
 });
-router.get("/userdata", authenticateUser, async (req, res) => {
-  res.send(req.user);
+router.get("/userdata", authenticateUser, async (req, res, next) => {
+  res.send(req.rootuser);
 });
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("access_token");
+  res.status(200).json({ message: "logout successfully" });
+})
 
 module.exports = router;
