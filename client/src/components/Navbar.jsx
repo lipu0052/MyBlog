@@ -6,7 +6,7 @@ import { FaMoon } from "react-icons/fa";
 
 const Nav = () => {
   const path = useLocation().pathname;
-  const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState({});
 
   // Function to fetch user profile data
   const fetchUserData = async () => {
@@ -25,7 +25,7 @@ const Nav = () => {
       setUser(data);
     } catch (error) {
       console.error('Error fetching user data:', error);
-      setUser(null);
+      setUser({});
     }
   };
   useEffect(() => {
@@ -39,7 +39,7 @@ const Nav = () => {
           className="self-center whitespace-nowrap text-sm sm:text-sm font-semibold md:text-bold dark:text-white"
         >
           <span className="px-2 py-1 bg-gradient-to-r rounded-sm from-indigo-500 via-purple-500 to-green-500 text-white ">
-            Biswa's{" "}
+{user.name}{" "}
           </span>
           BLOG
         </Link>
@@ -56,7 +56,13 @@ const Nav = () => {
         </Button>
       
         <div className="ml-auto items-center flex gap-2 md:order-2">
-        <Dropdown arrowIcon={false} inline label={
+
+          <Button color="light" className=" w-12 h-10 " pill>
+            <FaMoon />
+          </Button>
+          {user ? (
+            <>
+              <Dropdown arrowIcon={false} inline label={
           <Avatar
           alt="user"
           img={user.profileImg}
@@ -66,15 +72,28 @@ const Nav = () => {
                  
           />
         }>
-        </Dropdown>
-          <Button color="light" className=" w-12 h-10 " pill>
-            <FaMoon />
-          </Button>
-          <Link to="/signup">
+          </Dropdown>
+              <Link to="/logout">
+                <Button gradientDuoTone={"purpleToBlue"} className=" w-20 h-8 " >
+                  Logout
+                </Button>
+              </Link>
+
+            </>
+          ) : (
+            <Link to="/signup">
             <Button gradientDuoTone={"purpleToBlue"} className="h-8 w-30">
               Sign In
-            </Button>
+              </Button>
+             
           </Link>
+            
+            )
+          }
+              
+          
+            
+                    
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse className="m-auto font-semibold text-dark ">
