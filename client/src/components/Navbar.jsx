@@ -3,7 +3,7 @@ import { Button, Navbar, TextInput, Dropdown, Avatar } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
-
+import {useNavigate} from "react-router-dom";
 const Nav = () => {
   const path = useLocation().pathname;
   const [user, setUser] = React.useState({});
@@ -15,21 +15,50 @@ const Nav = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json'
 
         },
-        credentials: 'include',
+        credentials: 'include'
       });
+      
       const data = await response.json();
+      if(res.status === 200){
       setUser(data);
+      }
+
     } catch (error) {
-      console.error('Error fetching user data:', error);
       setUser({});
+      setUser({});
+      console.error('Error fetching user data:', error);
+     
     }
   };
   useEffect(() => {
     fetchUserData();
   }, [])
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/logout', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+
+        },
+        credentials: 'include',
+      });
+      navigate('/signup');
+      
+      if (response.status === 200) {
+        window.alert('Successfully logged out');
+        navigate('/signup');
+      }
+      
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+     
+    }
+  }
   return (
     <>
       <Navbar fluid={true} className="border-b-2">
@@ -59,35 +88,51 @@ const Nav = () => {
           <Button color="light" className=" w-12 h-10 " pill>
             <FaMoon />
           </Button>
-          {user ? (
-            <>
-              <Dropdown arrowIcon={false} inline label={
-                <Avatar
-                  alt="user"
-                  img={user.profileImg}
+          
+
+          
+          {!user || Object.keys(user).length === 0 ? (
+  <Link to="/signup">
+    <Button gradientDuoTone={"purpleToBlue"} className="h-8 w-30">
+      Sign In
+    </Button>
+  </Link>
+) : (
+          <Dropdown arrowIcon={false} inline label={
+            <Avatar
+              alt="user"
+              img={user.profileImg}
 
 
-                  rounded="small"
+              rounded="small"
 
-                />
-              }>
-              </Dropdown>
-              <Link to="/logout">
-                <Button gradientDuoTone={"purpleToBlue"} className=" w-20 h-8 " >
-                  Logout
-                </Button>
-              </Link>
+            />
+          }>
+          <Dropdown.Header> 
+            <span>@{user.name}</span>
+              <Span>{user.email}</Span>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
 
-            </>
+
+            </Dropdown.Header>
+            <Dropdown.Header>
+      <span>{user.email}</span>
+          </Dropdown.Header>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={handleLogout}>
+              Logout
+            </Dropdown.Item>
+          </Dropdown>
           ) : (
             <Link to="/signup">
-            <Button gradientDuoTone={"purpleToBlue"} className="h-8 w-30">
-              Sign In
-            </Button>
-          </Link>
-            
-          )
-          }
+              <Button gradientDuoTone={"purpleToBlue"} className="h-8 w-30">
+                Sign In
+              </Button>
+            </Link>
+           
+)}
+
 
 
 
