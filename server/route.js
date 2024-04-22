@@ -17,13 +17,16 @@ const authenticateUser = async (req, res, next) => {
   try {
     const token = req.cookies.access_token;
     if (!token) {
-      return res.status(401).json({ message: "No token provided" });
+      return res.status(401).json({ message: "Invalid token " });
     }
-    const user = jwt.verify(token, jwtSecret);
-    const rootUser = await User.findOne({ _id: user._id });
-console.log(rootUser);
-    req.rootuser = rootUser;
-    next();
+    else{
+      const user = jwt.verify(token, jwtSecret);
+      const rootUser = await User.findOne({ _id: user._id });
+      req.rootuser = rootUser;
+      next();
+    }
+    
+   
 
   } catch (err) {
     return res.status(401).json({ message: "Invalid token " });
@@ -125,8 +128,8 @@ router.get("/userdata", authenticateUser, async (req, res, next) => {
 });
 
 router.get("/logout", (req, res) => {
-  res.clearCookie("access_token");
-  res.status(200).json({ message: "logout successfully" });
+  res.clearCookie("access_token").status(200).json({ message: "logout successfully" });
+  
 })
 
 module.exports = router;

@@ -15,7 +15,12 @@ const GoogleAuth = ({ onSuccess }) => {
       // Handle successful authentication
       const res = await fetch("https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/googleSignin", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          'Accept': 'application/json'
+        },
+        credentials: "include",
+
         body: JSON.stringify({
           name: result.user.displayName,
           email: result.user.email,
