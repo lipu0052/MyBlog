@@ -51,6 +51,7 @@ const SignUp = () => {
     setTimeout(() => {
       navigate("/");
     }, 1000);
+    
   };
 
   return (

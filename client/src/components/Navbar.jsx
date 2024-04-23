@@ -2,12 +2,19 @@ import React, { useEffect } from "react";
 import { Button, Navbar, TextInput, Dropdown, Avatar } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
+import { FaMoon ,FaSun } from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
+import {useDispatch,useSelector} from "react-redux";
+import {toggleTheme} from  '../redux/themeSlice'
+
 const Nav = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {theme} = useSelector((state) => state.theme); // Accessing directly state.theme
+
   const path = useLocation().pathname;
   const [user, setUser] = React.useState('');
+  
 
   // Function to fetch user profile data
   const fetchUserData = async () => {
@@ -37,7 +44,7 @@ const Nav = () => {
   };
   useEffect(() => {
     fetchUserData();
-  })
+  },[navigate])
   const handleLogout = async () => {
     try {
       const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/logout', {
@@ -63,6 +70,7 @@ const Nav = () => {
 
     }
   }
+  
   return (
     <>
       <Navbar fluid={true} className="border-b-2">
@@ -75,22 +83,28 @@ const Nav = () => {
           </span>
           BLOG
         </Link>
-        <form className="flex h-2  ml-auto items-center">
+        <form className="flex h-3  ml-auto items-center">
           <TextInput
             type="text"
             placeholder="Search"
-            className="hidden sm:inline "
+            style={{ height: '2rem' }}
+            className="hidden sm:inline custom-input  "
             rightIcon={AiOutlineSearch}
           />
         </form>
-        <Button color="light" className="ml-auto h-8 w-10  sm:hidden" pill>
+        <Button color="light" className="ml-auto h-8 w-9  sm:hidden" pill>
           <AiOutlineSearch />
         </Button>
 
         <div className="ml-auto items-center flex gap-2 md:order-2">
 
-          <Button color="light" className=" w-12 h-10 " pill>
-            <FaMoon />
+        <Button
+            color="light"
+            onClick={() => dispatch(toggleTheme())}
+            className="w-9 h-8"
+            pill
+          >
+            {theme === 'dark'? <FaSun /> : <FaMoon />}
           </Button>
 
 
