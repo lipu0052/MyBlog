@@ -127,6 +127,8 @@ router.get("/userdata", authenticateUser, async (req, res, next) => {
   res.send(req.rootuser);
 });
 
+
+
 router.get("/logout", (req, res) => {
   res.clearCookie("access_token").status(200).json({ message: "logout successfully" });
   
