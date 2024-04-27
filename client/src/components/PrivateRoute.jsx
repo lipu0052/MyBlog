@@ -3,7 +3,7 @@ import { Outlet, Navigate } from 'react-router-dom';
 import {useNavigate} from'react-router-dom';
 
 const PrivateRoute = () => {
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
