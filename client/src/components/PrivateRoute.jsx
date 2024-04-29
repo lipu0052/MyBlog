@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import {useNavigate} from'react-router-dom';
-
+import Dashboard from './Dashboard';
 const PrivateRoute = () => {
-    const [user, setUser] = useState('');
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,6 +18,7 @@ const PrivateRoute = () => {
                     credentials: 'include',
                 });
                     const data = await response.json();
+                    console.log(data);
                     setUser(data);
                     if(response.status === 401) {
                         navigate('/signin');
@@ -34,9 +35,11 @@ const PrivateRoute = () => {
     return (
         <div>
           {user ? (
-            <Outlet />
+            <Dashboard user={user} />
             // Render dashboard content with user data
-          ) : null  
+          ) : <div className="flex  mt-40 justify-center min-h-screen">
+            Loading...
+          </div> 
           }
         </div>
       );

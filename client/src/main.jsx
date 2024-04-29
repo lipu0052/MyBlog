@@ -8,6 +8,7 @@ import App from './App'; // Assuming App is your root component
 import ThemeProvider from './components/ThemeProvide'; // Import your ThemeProvider component
 
 ReactDOM.render(
+  
     <Provider store={store}>
       <ThemeProvider> {/* Wrap your App with ThemeProvider */}
         <App />

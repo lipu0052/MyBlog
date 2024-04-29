@@ -73,7 +73,7 @@ const Nav = () => {
   
   return (
     <>
-      <Navbar fluid={true} className="border-b-2">
+      <Navbar fluid={true} className="border-b-2 ">
         <Link
           to="/"
           className="self-center whitespace-nowrap text-sm sm:text-sm font-semibold md:text-bold dark:text-white"
