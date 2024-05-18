@@ -45,7 +45,8 @@ const Nav = () => {
   useEffect(() => {
     fetchUserData();
   },[navigate])
-  const handleLogout = async () => {
+  
+  const logoutFunction = async () => {
     try {
       const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/logout', {
         method: 'GET',
@@ -70,6 +71,22 @@ const Nav = () => {
 
     }
   }
+  const handleLogout = async () => {
+    try {
+      const confirmed = window.confirm('Are you sure you want to log out?');
+  
+      if (confirmed) {
+        await logoutFunction();
+      } else {
+        // User clicked Cancel
+        // Handle the cancel action, such as staying on the current page or any other action you desire
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+      // Optionally, show an alert or handle the error in some other way
+    }
+  };
+  
   
   return (
     <>

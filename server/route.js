@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const User = require("./schema"); // Assuming the schema/model file is named model.js
 const bodyParser = require("body-parser");
 const router = express.Router();
@@ -19,14 +20,18 @@ const authenticateUser = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ message: "Invalid token " });
     }
-    else{
+    else {
       const user = jwt.verify(token, jwtSecret);
       const rootUser = await User.findOne({ _id: user._id });
-      req.rootuser = rootUser;
+      if (!rootUser) {
+        return res.status(401).json({ message: "User not found" });
+      }
+  
+      req.rootUser = rootUser;
       next();
     }
-    
-   
+
+
 
   } catch (err) {
     return res.status(401).json({ message: "Invalid token " });
@@ -72,7 +77,7 @@ router.post("/signin", async (req, res) => {
       if (!passwordMatch) {
         return res.status(401).json("Wrong password");
       } else {
-        const token = await  jwt.sign({ _id: user._id }, jwtSecret);
+        const token =  jwt.sign({ _id: user._id }, jwtSecret);
         res.cookie("access_token", token, {
           httpOnly: true,
         });
@@ -89,7 +94,7 @@ router.post("/googleSignin", async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = await jwt.sign({ _id: user._id }, jwtSecret);
+      const token =  jwt.sign({ _id: user._id }, jwtSecret);
       console.log(token);
       res.cookie("access_token", token, {
         httpOnly: true,
@@ -110,7 +115,7 @@ router.post("/googleSignin", async (req, res, next) => {
         profileImg: googlePhotoUrl,
       });
       await newUser.save();
-      const token = await jwt.sign({ _id: newUser._id }, jwtSecret);
+      const token =  jwt.sign({ _id: newUser._id }, jwtSecret);
       console.log(token);
 
 
@@ -124,14 +129,83 @@ router.post("/googleSignin", async (req, res, next) => {
   }
 });
 router.get("/userdata", authenticateUser, async (req, res, next) => {
-  res.send(req.rootuser);
+  res.send(req.rootUser);
 });
 
 
 
 router.get("/logout", (req, res) => {
   res.clearCookie("access_token").status(200).json({ message: "logout successfully" });
-  
+
 })
 
+// In your backend router file
+router.put('/updateProfile/:userId', authenticateUser, async (req, res, next) => {
+  const { name, email, password } = req.body;
+  let profileImg = req.body.profileImg;
+  const rootUserId = req.rootUser._id.toString();
+
+  if (req.params.userId !== rootUserId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const updates = { name, email, profileImg };
+
+  // Validate and handle password update if provided
+  if (password) {
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
+    const hashPass = await bcrypt.hash(password, 10);
+    updates.password = hashPass;
+  }
+
+  // Validate other fields if needed
+  if (name) {
+    if (name.length < 6 || name.length > 20) {
+      return res.status(400).json({ message: 'Name must be between 6 and 20 characters' });
+    }
+    if (name.includes(' ')) {
+      return res.status(400).json({ message: 'Name must not contain spaces' });
+    }
+    if (name !== name.toLowerCase()) {
+      return res.status(400).json({ message: 'Name must be lowercase' });
+    }
+    if (!name.match(/^[a-zA-Z0-9]+$/)) {
+      return res.status(400).json({ message: 'Name must be alphanumeric' });
+    }
+  }
+
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: updates },
+      { new: true }
+    );
+    res.status(200).json({ message: 'Profile updated successfully', updatedUser });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Internal server error' });
+    next(error);
+  }
+});
+
+router.delete('/deleteAccount/:userId', authenticateUser, async (req, res, next) => {
+  try {
+    const rootUserId = req.rootUser._id.toString();
+    if (req.params.userId !== rootUserId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const deletedUser = await User.findOneAndDelete({ _id: req.params.userId });
+    if (!deletedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    // Clear the access token cookie
+    res.clearCookie('access_token');
+    res.status(200).json({ message: 'Account deleted successfully', deletedUser });
+  } catch (err) {
+    console.error("Delete account error:", err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 module.exports = router;

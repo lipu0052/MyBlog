@@ -20,7 +20,7 @@ const SignUp = () => {
 
     try {
       setLoading(true);
-      const res = await fetch("https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/signup", {
+      const res = await fetch(" https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
