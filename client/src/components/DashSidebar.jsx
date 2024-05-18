@@ -9,7 +9,6 @@ const DashSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [tab, setTab] = useState('');
-  const [showMore, setShowMore] = useState(false); // State to toggle the visibility of additional sidebar items
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -33,7 +32,6 @@ const DashSidebar = () => {
       
 
       if (response.status === 200) {
-        window.alert('Successfully logged out');
         navigate('/signup');
 
       }
@@ -43,21 +41,7 @@ const DashSidebar = () => {
 
     }
   }
-  const handleLogout = async () => {
-    try {
-      const confirmed = window.confirm('Are you sure you want to log out?');
   
-      if (confirmed) {
-        await logoutFunction();
-      } else {
-        // User clicked Cancel
-        // Handle the cancel action, such as staying on the current page or any other action you desire
-      }
-    } catch (error) {
-      console.error('Error logging out:', error);
-      // Optionally, show an alert or handle the error in some other way
-    }
-  };
   
   
 
@@ -71,10 +55,16 @@ const DashSidebar = () => {
             </Sidebar.Item>
           </Link>
           <Link >
-            <Sidebar.Item icon={HiLogout} onClick={handleLogout} >
-              Logout
+            <Sidebar.Item icon={HiLogout}  onClick={logoutFunction} >
+             <span className="text-red-500">Logout</span>
             </Sidebar.Item>
           </Link>
+          <Link >
+          
+
+
+          </Link>
+
           
         </Sidebar.ItemGroup>
       </Sidebar.Items>

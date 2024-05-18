@@ -6,6 +6,7 @@ import { FaMoon ,FaSun } from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 import {useDispatch,useSelector} from "react-redux";
 import {toggleTheme} from  '../redux/themeSlice'
+import { FaArrowRight } from "react-icons/fa";
 
 const Nav = () => {
   const navigate = useNavigate();
@@ -60,7 +61,6 @@ const Nav = () => {
       
 
       if (response.status === 200) {
-        window.alert('Successfully logged out');
         setUser('');
         navigate('/signup');
 
@@ -71,21 +71,7 @@ const Nav = () => {
 
     }
   }
-  const handleLogout = async () => {
-    try {
-      const confirmed = window.confirm('Are you sure you want to log out?');
   
-      if (confirmed) {
-        await logoutFunction();
-      } else {
-        // User clicked Cancel
-        // Handle the cancel action, such as staying on the current page or any other action you desire
-      }
-    } catch (error) {
-      console.error('Error logging out:', error);
-      // Optionally, show an alert or handle the error in some other way
-    }
-  };
   
   
   return (
@@ -109,7 +95,7 @@ const Nav = () => {
             rightIcon={AiOutlineSearch}
           />
         </form>
-        <Button color="light" className="ml-auto h-8 w-9  sm:hidden" pill>
+        <Button color="light" className="ml-auto h-8 w-8  sm:hidden" pill>
           <AiOutlineSearch />
         </Button>
 
@@ -118,7 +104,7 @@ const Nav = () => {
         <Button
             color="light"
             onClick={() => dispatch(toggleTheme())}
-            className="w-9 h-8"
+            className="w-8 h-8 sm:w-6 sm:h-6"
             pill
           >
             {theme === 'dark'? <FaSun /> : <FaMoon />}
@@ -138,6 +124,9 @@ const Nav = () => {
                 alt="user"
                 img={user.profileImg}
                 rounded="small"
+                size="sm"
+                style={{ width: '2rem', height: '2rem' }}
+               
               />
             }>
               <Dropdown.Header>
@@ -147,8 +136,12 @@ const Nav = () => {
                 <span className="text-sm">{user.email}</span>
               </Dropdown.Header>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={handleLogout} className="color-red  ">
-                Logout
+              <Dropdown.Item  onClick={() => navigate('/dashboard?tab=profile')}>
+                Profile <FaArrowRight  className="  inline ml-auto" />
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={logoutFunction}  >
+               <span className="text-red-500">Logout</span>
               </Dropdown.Item>
             </Dropdown>
             
@@ -171,9 +164,7 @@ const Nav = () => {
           <Navbar.Link active={path === "/projects"} as={"div"}>
             <Link to="/projects">Projects</Link>
           </Navbar.Link>
-          <Navbar.Link active={path === "/dashboard"} as={"div"}>
-            <Link to="/dashboard">Dashboard</Link>
-          </Navbar.Link>
+          
         </Navbar.Collapse>
       </Navbar>
     </>

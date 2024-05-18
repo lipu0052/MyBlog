@@ -23,21 +23,7 @@ const DashProfile = ({ user }) => {
   const [showModal, setShowModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogout = async () => {
-    try {
-      const confirmed = window.confirm('Are you sure you want to log out?');
-
-      if (confirmed) {
-        await logoutFunction();
-      } else {
-        // User clicked Cancel
-        // Handle the cancel action, such as staying on the current page or any other action you desire
-      }
-    } catch (error) {
-      console.error('Error logging out:', error);
-      // Optionally, show an alert or handle the error in some other way
-    }
-  };
+  
 
 
   const logoutFunction = async () => {
@@ -54,7 +40,6 @@ const DashProfile = ({ user }) => {
 
 
       if (response.status === 200) {
-        window.alert('Successfully logged out');
         navigate('/signup');
 
       }
@@ -180,7 +165,6 @@ const DashProfile = ({ user }) => {
 
       const data = await res.json();
       if (res.status === 200) {
-        window.alert('Successfully deleted account');
         navigate('/');
       } 
     } catch (err) {
@@ -273,7 +257,7 @@ const DashProfile = ({ user }) => {
       </form>
       <div className="mt-2 flex justify-between">
         <span className="text-sm cursor-pointer text-red-600" onClick={() => setShowModal(true)}>Delete Account</span>
-        <span className="text-sm cursor-pointer text-red-600" onClick={handleLogout}>Logout</span>
+        <span className="text-sm cursor-pointer text-red-600" onClick={logoutFunction}>Logout</span>
       </div>
       {
         updatingSuccess && <Alert color="success" className="m-2">{updatingSuccess}</Alert>
