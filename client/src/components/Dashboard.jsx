@@ -2,7 +2,7 @@ import React,{useEffect,useState} from "react";
 import {useLocation} from "react-router-dom"
 import DashSidebar from "./DashSidebar";
 import DashProfile from "./DashProfile";
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "../route/PrivateRoute";
 
 
 const Dashboard = ({user}) => {

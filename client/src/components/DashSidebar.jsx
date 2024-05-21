@@ -20,7 +20,7 @@ const DashSidebar = () => {
 
   const logoutFunction = async () => {
     try {
-      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/logout', {
+      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/logout', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

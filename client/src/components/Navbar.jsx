@@ -153,7 +153,7 @@ const Nav = () => {
 
           <Navbar.Toggle />
         </div>
-        <Navbar.Collapse className="m-auto font-semibold text-dark ">
+        <Navbar.Collapse className="m-auto text-white text-dark ">
           <Navbar.Link active={path === "/"} as={"div"}>
             <Link to="/">Home</Link>
           </Navbar.Link>

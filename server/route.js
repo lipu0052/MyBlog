@@ -26,7 +26,7 @@ const authenticateUser = async (req, res, next) => {
       if (!rootUser) {
         return res.status(401).json({ message: "User not found" });
       }
-  
+
       req.rootUser = rootUser;
       next();
     }
@@ -77,7 +77,7 @@ router.post("/signin", async (req, res) => {
       if (!passwordMatch) {
         return res.status(401).json("Wrong password");
       } else {
-        const token =  jwt.sign({ _id: user._id }, jwtSecret);
+        const token = jwt.sign({ _id: user._id, isAdmin: user.isAdmin }, jwtSecret);
         res.cookie("access_token", token, {
           httpOnly: true,
         });
@@ -94,7 +94,7 @@ router.post("/googleSignin", async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token =  jwt.sign({ _id: user._id }, jwtSecret);
+      const token = jwt.sign({ _id: user._id, isAdmin: user.isAdmin }, jwtSecret);
       console.log(token);
       res.cookie("access_token", token, {
         httpOnly: true,
@@ -115,7 +115,7 @@ router.post("/googleSignin", async (req, res, next) => {
         profileImg: googlePhotoUrl,
       });
       await newUser.save();
-      const token =  jwt.sign({ _id: newUser._id }, jwtSecret);
+      const token = jwt.sign({ _id: newUser._id, isAdmin: newUser.isAdmin }, jwtSecret);
       console.log(token);
 
 

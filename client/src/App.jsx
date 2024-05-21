@@ -6,8 +6,10 @@ import Nav from "./components/Navbar";
 import Footer from "./components/Footer";
 import SignUp from "./components/SignUp";
 import Signin from "./components/Signin";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./route/PrivateRoute";
 import Dashboard from "./components/Dashboard";
+import OnlyAdminPrivateRoute from "./route/OnlyAdminPrivateRoute";
+import Post from "./pages/Post";
 
 const App = () => {
 
@@ -20,6 +22,10 @@ const App = () => {
         <Route path="/signin" element={<Signin />} />
         <Route element={<PrivateRoute />} >
           <Route path="/dashboard" element={<Dashboard />} />
+
+        </Route>
+        <Route element={<OnlyAdminPrivateRoute />} >
+          <Route path="/post" element={<Post />} />
 
         </Route>
       </Routes>

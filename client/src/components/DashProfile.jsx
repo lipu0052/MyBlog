@@ -4,8 +4,9 @@ import 'react-circular-progressbar/dist/styles.css';
 import { TextInput, Button, Alert, Modal } from 'flowbite-react';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'; import { app } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-import {HiOutlineExclamationCircle} from 'react-icons/hi'
+import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { HiEye, HiEyeOff } from 'react-icons/hi';
+import { Link } from 'react-router-dom'
 
 
 const DashProfile = ({ user }) => {
@@ -20,15 +21,17 @@ const DashProfile = ({ user }) => {
   const [imgUploading, setImgUploading] = useState(false);
   const [updatingSuccess, setUpdatingSuccess] = useState(null);
   const [updatingError, setUpdatingError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [showModal, setShowModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  
+
 
 
   const logoutFunction = async () => {
     try {
-      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/logout', {
+      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/logout', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -102,7 +105,7 @@ const DashProfile = ({ user }) => {
 
 
   }
-  
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -112,20 +115,24 @@ const DashProfile = ({ user }) => {
     e.preventDefault();
     setUpdatingSuccess(null)
     setUpdatingError(null)
+    setIsSubmitting(true);
+
     const updatedFormData = { ...formData };
-  if (!updatedFormData.password) {
-    updatedFormData.password = ''; // Set password to empty string if not provided
-  }
+    if (!updatedFormData.password) {
+      updatedFormData.password = ''; // Set password to empty string if not provided
+    }
     if (Object.keys(formData).length === 0) {
       setUpdatingError("No changes were made")
+      setIsSubmitting(false);
       return;
     }
     if (imgUploading) {
       setUpdatingError("Please wait while the image is being uploaded");
+      setIsSubmitting(false);
       return;
     }
     try {
-      const res = await fetch(`https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/updateProfile/${user._id}`, {
+      const res = await fetch(`https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/updateProfile/${user._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -138,9 +145,9 @@ const DashProfile = ({ user }) => {
       const data = await res.json();
       if (res.status === 200) {
         setUpdatingSuccess("Successfully updated");
-        setTimeout(() =>{
+        setTimeout(() => {
           setUpdatingSuccess(null)
-        },5000)
+        }, 5000)
 
       } else {
         setUpdatingError(data.message);
@@ -149,12 +156,15 @@ const DashProfile = ({ user }) => {
       console.error(err);
       setUpdatingError(data.message);
       // Handle error
+    } finally {
+      setIsSubmitting(false);
     }
+
   }
   const deleteAccount = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/deleteAccount/${user._id}`, {
+      const res = await fetch(`https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/deleteAccount/${user._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -166,7 +176,7 @@ const DashProfile = ({ user }) => {
       const data = await res.json();
       if (res.status === 200) {
         navigate('/');
-      } 
+      }
     } catch (err) {
       console.error(err);
       window.alert(data.message);
@@ -251,9 +261,22 @@ const DashProfile = ({ user }) => {
         </div>
 
         {/* ... */}
-        <Button type="submit" gradientDuoTone="greenToBlue" outline className="w-full">
-          Update
+        
+        <Button type="submit" gradientDuoTone="greenToBlue" outline className="w-full" disabled={imgUploading || isSubmitting}>
+          {isSubmitting ? 'Loading...' : 'Update'}
         </Button>
+
+        {
+          user.isAdmin && (
+            <Link to={'/post'}>
+              <Button gradientDuoTone="greenToBlue" outline className="w-full">
+                Create Post
+              </Button>
+
+            </Link>
+
+          )
+        }
       </form>
       <div className="mt-2 flex justify-between">
         <span className="text-sm cursor-pointer text-red-600" onClick={() => setShowModal(true)}>Delete Account</span>
@@ -269,12 +292,12 @@ const DashProfile = ({ user }) => {
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
         <Modal.Body>
           <div className="text-center">
-            <HiOutlineExclamationCircle  className="h-14 w-14 text-gray-700 mx-auto mb-2 dark:text-grey-200"/> 
+            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-700 mx-auto mb-2 dark:text-grey-200" />
             <h1 className="text-xl font-semibold">Are you sure you want to delete your account?</h1>
             <div className="
             flex justify-between h-8 mt-2">
-              <Button  color='failure' outline  onClick={deleteAccount}>Yes</Button>
-              <Button color="success"  outline onClick={() => setShowModal(false)}>No</Button>
+              <Button color='failure' outline onClick={deleteAccount}>Yes</Button>
+              <Button color="success" outline onClick={() => setShowModal(false)}>No</Button>
             </div>
           </div>
 
