@@ -7,7 +7,7 @@ const router = require("./route");
 const cors = require("cors");
 
 const coreOptions = {
-  origin: ["https://5173-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io"],
+  origin: ["https://5173-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 
   credentials: true,

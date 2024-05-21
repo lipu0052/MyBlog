@@ -20,7 +20,7 @@ const Nav = () => {
   // Function to fetch user profile data
   const fetchUserData = async () => {
     try {
-      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/userdata', {
+      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/userdata', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const Nav = () => {
   
   const logoutFunction = async () => {
     try {
-      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us110.gitpod.io/logout', {
+      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/logout', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const Nav = () => {
             rightIcon={AiOutlineSearch}
           />
         </form>
-        <Button color="light" className="ml-auto h-8 w-8  sm:hidden" pill>
+        <Button color="light" className=" h-6 w-6  sm:hidden" pill>
           <AiOutlineSearch />
         </Button>
 
@@ -104,7 +104,7 @@ const Nav = () => {
         <Button
             color="light"
             onClick={() => dispatch(toggleTheme())}
-            className="w-8 h-8 sm:w-6 sm:h-6"
+            className="w-6 h-6 sm:w-6 sm:h-6"
             pill
           >
             {theme === 'dark'? <FaSun /> : <FaMoon />}
@@ -125,7 +125,6 @@ const Nav = () => {
                 img={user.profileImg}
                 rounded="small"
                 size="sm"
-                style={{ width: '2rem', height: '2rem' }}
                
               />
             }>
