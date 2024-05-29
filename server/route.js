@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const User = require("./schema"); // Assuming the schema/model file is named model.js
+const User = require("./userSchema");
+const Post = require('./postSchema');
 const bodyParser = require("body-parser");
 const router = express.Router();
 router.use(bodyParser.json());
@@ -207,5 +208,31 @@ router.delete('/deleteAccount/:userId', authenticateUser, async (req, res, next)
     console.error("Delete account error:", err);
     res.status(500).json({ message: 'Internal server error' });
   }
+});
+router.post('/post',authenticateUser,async(req,res,next)=>{
+  if(!req.body.isAdmin){
+    return res.status(401).json({message:'Unauthorized'})
+  }  
+  if(!req.body.title || !req.body.content ){
+    return res.status(400).json({message:'please provide all the field'})
+  }
+  const slug = req.body.title.split(' ').join('_').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '_');
+  const newPost = new Post({
+    title: req.body.title,
+    slug,
+    content: req.body.content,
+    author: req.rootUser._id,
+  });
+
+  try{
+    const savedPost = await newPost.save();
+    res.status(201).json({message:'Post created successfully',savedPost})
+
+  }catch(err){
+
+    res.status(500).json({message:err.message})
+  }
+
+
 });
 module.exports = router;
