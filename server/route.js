@@ -209,30 +209,34 @@ router.delete('/deleteAccount/:userId', authenticateUser, async (req, res, next)
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-router.post('/post',authenticateUser,async(req,res,next)=>{
-  if(!req.body.isAdmin){
-    return res.status(401).json({message:'Unauthorized'})
-  }  
-  if(!req.body.title || !req.body.content ){
-    return res.status(400).json({message:'please provide all the field'})
+router.post('/post', authenticateUser, async (req, res) => {
+  if (!req.rootUser.isAdmin) {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
-  const slug = req.body.title.split(' ').join('_').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '_');
+
+  const { title, content, image , category } = req.body;
+
+  if (!title || !content || !category) {
+    return res.status(400).json({ message: 'Please provide all fields' });
+  }
+
+  const slug = title.split(' ').join('_').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '_');
+
   const newPost = new Post({
-    title: req.body.title,
+    title,
     slug,
-    content: req.body.content,
+    content,
+    category,
     author: req.rootUser._id,
+    image: image || 'https://www.hostinger.com/tutorials/wp-content/uploads/sites/2/2021/09/how-to-write-a-blog-post.webp'
   });
 
-  try{
+  try {
     const savedPost = await newPost.save();
-    res.status(201).json({message:'Post created successfully',savedPost})
-
-  }catch(err){
-
-    res.status(500).json({message:err.message})
+    res.status(201).json({ message: 'Post created successfully', savedPost });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-
-
 });
+
 module.exports = router;
