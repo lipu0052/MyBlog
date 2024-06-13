@@ -223,7 +223,7 @@ router.post('/post', authenticateUser, async (req, res) => {
   const slug = title.split(' ').join('_').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '_');
 
   const newPost = new Post({
-    title,
+   
     slug,
     content,
     category,

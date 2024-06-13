@@ -7,6 +7,7 @@ import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from 'react-router-dom'
+import sanitizeHtml from 'sanitize-html'; 
 
 const Post = () => {
   const navigate = useNavigate();
@@ -57,9 +58,14 @@ const Post = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const sanitizedContent = sanitizeHtml(formData.content, {
+        allowedTags: [], // No allowed tags, strip everything
+        allowedAttributes: {} // No allowed attributes, strip everything
+      });
+
       const res = await fetch("https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/post", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, content: sanitizedContent }),
         headers: {
           "Content-Type": "application/json",
           Accept: 'application/json'
