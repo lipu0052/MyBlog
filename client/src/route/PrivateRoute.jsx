@@ -9,7 +9,7 @@ const PrivateRoute = () => {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/userdata', {
+                const response = await fetch('http://localhost:3001/userdata', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

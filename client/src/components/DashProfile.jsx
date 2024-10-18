@@ -32,7 +32,7 @@ const DashProfile = ({ user }) => {
 
   const logoutFunction = async () => {
     try {
-      const response = await fetch('https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/logout', {
+      const response = await fetch('http://localhost:3001/logout', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ const DashProfile = ({ user }) => {
       return;
     }
     try {
-      const res = await fetch(`https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/updateProfile/${user._id}`, {
+      const res = await fetch(`http://localhost:3001/updateProfile/${user._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ const DashProfile = ({ user }) => {
   const deleteAccount = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/deleteAccount/${user._id}`, {
+      const res = await fetch(`http://localhost:3001/deleteAccount/${user._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

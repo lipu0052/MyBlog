@@ -63,7 +63,7 @@ const Post = () => {
         allowedAttributes: {} // No allowed attributes, strip everything
       });
 
-      const res = await fetch("https://3001-lipu0052-myblog-41hg32rb1tg.ws-us114.gitpod.io/post", {
+      const res = await fetch("http://localhost:3001/post", {
         method: "POST",
         body: JSON.stringify({ ...formData, content: sanitizedContent }),
         headers: {
