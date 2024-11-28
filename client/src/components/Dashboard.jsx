@@ -3,6 +3,7 @@ import {useLocation} from "react-router-dom"
 import DashSidebar from "./DashSidebar";
 import DashProfile from "./DashProfile";
 import PrivateRoute from "../route/PrivateRoute";
+import DashPost from "./DashPost";
 
 
 const Dashboard = ({user}) => {
@@ -22,12 +23,16 @@ const Dashboard = ({user}) => {
   
     <div className="md:w-50">
       {/* sidebar */}
-      <DashSidebar/>
+      <DashSidebar user={user} />
       
       
     </div>
-    {/* profile */}
+    {/* profile */} 
     {tab === 'profile' && <DashProfile user={user} />}
+
+    {/* posts */}
+    {tab === 'posts' && <DashPost />}
+
 
     </div>
     

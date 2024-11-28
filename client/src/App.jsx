@@ -10,6 +10,7 @@ import PrivateRoute from "./route/PrivateRoute";
 import Dashboard from "./components/Dashboard";
 import OnlyAdminPrivateRoute from "./route/OnlyAdminPrivateRoute";
 import Post from "./pages/Post";
+import EditPost from "./pages/EditPost";
 
 const App = () => {
 
@@ -26,8 +27,8 @@ const App = () => {
         </Route>
         <Route element={<OnlyAdminPrivateRoute />} >
           <Route path="/post" element={<Post />} />
-
-        </Route>
+          <Route path="/editpost/:postId" element={<EditPost />} />
+          </Route>
       </Routes>
       <Footer />
     </BrowserRouter>

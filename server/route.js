@@ -239,4 +239,75 @@ router.post('/post', authenticateUser, async (req, res) => {
   }
 });
 
+router.get('/posts', authenticateUser, async (req, res) => {
+  const { postId } = req.query; // Get postId from query parameters
+  try {
+      let posts;
+      if (postId) {
+          // Fetch a single post by its ID
+          posts = await Post.find({ _id: postId });
+      } else {
+          // Fetch all posts if no postId is provided
+          posts = await Post.find();
+      }
+      res.status(200).json({ message: 'Posts fetched successfully', posts });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+
+
+router.delete('/deletePost/:postId', authenticateUser, async (req, res) => {
+  try {
+    const rootUserId = req.rootUser._id.toString();
+    const post = await Post.findOne({ _id: req.params.postId });
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    if (post.author.toString() !== rootUserId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const deletedPost = await Post.findOneAndDelete({ _id: req.params.postId });
+    res.status(200).json({ message: 'Post deleted successfully', deletedPost });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+// Assuming you have express and necessary imports
+router.put('/editPost/:postId', authenticateUser, async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { slug, content, category, image } = req.body;
+
+    // Find the post by ID
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Check if the logged-in user is the author of the post
+    if (post.author.toString() !== req.rootUser._id.toString()) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Update fields if provided
+    post.slug = slug || post.slug;
+    post.content = content || post.content;
+    post.category = category || post.category;
+    post.image = image || post.image;
+
+    // Save the updated post
+    const updatedPost = await post.save();
+
+    res.status(200).json({ message: 'Post updated successfully', updatedPost });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+
+
 module.exports = router;
