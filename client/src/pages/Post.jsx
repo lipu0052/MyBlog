@@ -120,7 +120,7 @@ const Post = () => {
         {imgUploadingError && <Alert color="failure">{imgUploadingError}</Alert>}
         {formData.image && <img src={formData.image} alt='upload' className='h-72 w-full object-cover' />}
         <div>
-          <ReactQuill onChange={(value) => setFormData({ ...formData, content: value })} className='h-32 mb-12' required theme="snow" placeholder='Write Your Post' />
+          <ReactQuill onChange={(value) => setFormData({ ...formData, content: value })} className='h-52 mb-12' required theme="snow" placeholder='Write Your Post' />
         </div>
         <Button type="submit" outline gradientDuoTone="purpleToBlue" className="w-full mt-5 h-10">
           Post
