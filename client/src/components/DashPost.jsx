@@ -9,7 +9,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import sanitizeHtml from 'sanitize-html';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const DashPost = () => {
   const navigate = useNavigate();
@@ -86,17 +86,17 @@ const DashPost = () => {
 
       {/* Sort By Dropdown */}
       <div className="flex justify-end items-center mb-2">
-  <label htmlFor="sortBy" className="text-sm font-medium m-2">Sort by:</label>
-  <select
-    id="sortBy"
-    value={sortBy}
-    onChange={(e) => setSortBy(e.target.value)}
-    className="p-2 border rounded-lg bg-gray-100 text-gray-700"
-  >
-    <option value="newest" className="text-gray-700">Newest</option>
-    <option value="oldest" className="text-gray-700">Oldest</option>
-  </select>
-</div>
+        <label htmlFor="sortBy" className="text-sm font-medium m-2">Sort by:</label>
+        <select
+          id="sortBy"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="p-2 border rounded-lg bg-gray-100 text-gray-700"
+        >
+          <option value="newest" className="text-gray-700">Newest</option>
+          <option value="oldest" className="text-gray-700">Oldest</option>
+        </select>
+      </div>
 
       {/* Display Posts */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -108,24 +108,27 @@ const DashPost = () => {
                   {new Date(post.createdAt).toLocaleDateString()}
                 </p>
                 {post.image && (
-                  <img src={post.image} alt={post.title || 'Post Image'} className="h-40 w-full object-cover" />
+                  <Link to={`/post/${post._id}`}>
+                    <img src={post.image} alt={post.title || 'Post Image'} className="h-40 w-full object-cover" />
+
+                  </Link>
                 )}
-               
-                  <h3 className="text-xl font-bold ">{post.slug || 'Untitled'}</h3>
-                  <p className="text-sm text-gray-600 ">{post.category}</p>
-                  <div className="flex justify-between gap-2 items-center ">
-                    <Button
-                      color="red"
-                      onClick={() => {
-                        setSelectedPostId(post._id);
-                        setShowModal(true);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                    <Button onClick={() => navigate(`/editpost/${post._id}`)}>Edit</Button>
-                  </div>
-                
+
+                <h3 className="text-xl font-bold ">{post.slug || 'Untitled'}</h3>
+                <p className="text-sm text-gray-600 ">{post.category}</p>
+                <div className="flex justify-between gap-2 items-center ">
+                  <Button
+                    color="red"
+                    onClick={() => {
+                      setSelectedPostId(post._id);
+                      setShowModal(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                  <Button onClick={() => navigate(`/editpost/${post._id}`)}>Edit</Button>
+                </div>
+
               </Card>
             </div>
           ))
@@ -135,13 +138,13 @@ const DashPost = () => {
       </div>
       {/* Pagination Controls */}
       <div className="flex justify-between items-center mt-6">
-          <Button onClick={handlePrevPage} disabled={currentPage === 1}>
-            Previous
-          </Button>
-          <Button onClick={handleNextPage} disabled={lastPostIndex >= posts.length}>
-            Next
-          </Button>
-        </div>
+        <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+          Previous
+        </Button>
+        <Button onClick={handleNextPage} disabled={lastPostIndex >= posts.length}>
+          Next
+        </Button>
+      </div>
 
       {/* Delete Confirmation Modal */}
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">

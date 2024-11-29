@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from 'flowbite-react';
-import { HiUser, HiLogout, HiDotsVertical, HiDocumentText } from 'react-icons/hi';
+import { HiUser, HiLogout, HiDotsVertical, HiDocumentText, HiOutlineUserGroup } from 'react-icons/hi';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useNavigate } from'react-router-dom';
@@ -58,6 +58,13 @@ const DashSidebar = ({user}) => {
              <Link to="/dashboard?tab=posts">
              <Sidebar.Item as="div" active={tab === 'posts'} icon={HiDocumentText} >
                Posts
+             </Sidebar.Item>
+           </Link>
+          )}
+          {user.isAdmin && (
+             <Link to="/dashboard?tab=users">
+             <Sidebar.Item as="div" active={tab === 'users'} icon={HiOutlineUserGroup} >
+               Users
              </Sidebar.Item>
            </Link>
           )}

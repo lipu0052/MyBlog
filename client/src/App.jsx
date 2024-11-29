@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
+import Home from "./pages/Home";
 import Nav from "./components/Navbar";
 import Footer from "./components/Footer";
-import SignUp from "./components/SignUp";
-import Signin from "./components/Signin";
+import SignUp from "./pages/SignUp";
+import Signin from "./pages/Signin";
 import PrivateRoute from "./route/PrivateRoute";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./pages/Dashboard";
 import OnlyAdminPrivateRoute from "./route/OnlyAdminPrivateRoute";
 import Post from "./pages/Post";
 import EditPost from "./pages/EditPost";
+import PostPage from "./pages/PostPage";
+import Subscribe from "./pages/Subscribe"; // Import Subscribe page
 
 const App = () => {
-
   return (
     <BrowserRouter>
       <Nav />
@@ -23,12 +23,13 @@ const App = () => {
         <Route path="/signin" element={<Signin />} />
         <Route element={<PrivateRoute />} >
           <Route path="/dashboard" element={<Dashboard />} />
-
         </Route>
         <Route element={<OnlyAdminPrivateRoute />} >
           <Route path="/post" element={<Post />} />
           <Route path="/editpost/:postId" element={<EditPost />} />
-          </Route>
+        </Route>
+        <Route path="/post/:postId" element={<PostPage />} />
+        <Route path="/subscribe" element={<Subscribe />} /> {/* Add Subscribe route */}
       </Routes>
       <Footer />
     </BrowserRouter>

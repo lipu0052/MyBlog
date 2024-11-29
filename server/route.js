@@ -1,10 +1,18 @@
+const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 router.use(bodyParser.json());
-const bcrypt = require("bcryptjs");
+const commentRouter = require("./routes/comment")
 
-const jwt = require("jsonwebtoken");
-const jwtSecret = "mynameisbiswaiamfromboindaangulodisha";
+const userRouter = require("./routes/userRoute")
+const postRouter = require("./routes/postroute")
+
+
+
+
+router.use(commentRouter);
+router.use(postRouter);
+router.use(userRouter);
 
 // POST route to create a new user
 router.get("/", (req, res) => {
